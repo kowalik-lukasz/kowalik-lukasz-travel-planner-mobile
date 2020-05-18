@@ -1,15 +1,22 @@
 import kivy
+import sqlite3
 
-kivy.require('1.11.1')
+kivy.require("1.11.1")
 
-from kivy.app import App
-from kivy.garden.mapview import MapView
+from kivymd.app import MDApp
+from travel_planner_mapview import TravelPlannerMapView
 
 
-class MapViewApp(App):
-    def build(self):
-        return MapView(zoom=11, lat=50.6394, lon=3.057)
+class MainApp(MDApp):
+    conn = None
+    cur = None
 
+    def on_start(self):
+        # GPS init
+
+        # Database init
+        self.conn = sqlite3.connect("travel_planner.db")
+        self.cur = self.conn.cursor()
 
 if __name__ == '__main__':
-    MapViewApp().run()
+    MainApp().run()
