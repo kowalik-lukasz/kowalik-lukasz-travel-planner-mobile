@@ -18,5 +18,6 @@ class MainApp(MDApp):
         self.conn = sqlite3.connect("travel_planner.db")
         self.cur = self.conn.cursor()
 
+
 if __name__ == '__main__':
     MainApp().run()
