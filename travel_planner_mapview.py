@@ -1,6 +1,7 @@
 import math
 from kivy.garden.mapview import MapView
 from kivy.clock import Clock
+from functools import partial
 from kivy.app import App
 from poi_marker import POIMarker
 
@@ -9,16 +10,20 @@ from poi_marker import POIMarker
 class TravelPlannerMapView(MapView):
     getting_markers_timer = None
     poi_names = []  # A list to store markers currently displayed on the screen in order not to duplicate them
+    active_poi_widgets = []
+
+    def cancel_timer(self):
+        try:
+            self.getting_markers_timer.cancel()
+        except:
+            pass
 
     def start_getting_markers_in_fov(self):
         # After one second of users immobility start displaying markers in his fov provided that the zoom in no less
         # than 6.
-        try:
-            self.getting_markers_timer.cancel()
-        except AttributeError:
-            pass
 
         self.getting_markers_timer = Clock.schedule_once(self.get_markers_in_fov, 1)
+        print(self.zoom)
 
     def get_markers_in_fov(self, *args):
         min_lat, min_lon, max_lat, max_lon = self.get_bbox()
@@ -42,3 +47,10 @@ class TravelPlannerMapView(MapView):
         marker = POIMarker(lat=lat, lon=lon)
         marker.poi_data = poi
         self.add_widget(marker)
+        self.active_poi_widgets.append(marker)
+
+    def delete_poi_markers(self):
+        for marker in self.active_poi_widgets:
+            self.remove_widget(marker)
+        self.active_poi_widgets.clear()
+        self.poi_names.clear()

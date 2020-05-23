@@ -1,12 +1,22 @@
 #:import MapView kivy.garden.mapview.MapView
+#:import GPSBlinker gps_blinker.GPSBlinker
+#:include gpsblinker.kv
 
 <TravelPlannerMapView>:
     lat: 52.13
     lon: 21.00
     zoom: 5
     on_zoom:
+        self.cancel_timer()
         self.zoom = 3 if self.zoom <= 3 else self.zoom
+        if self.zoom < 10: self.delete_poi_markers()
     on_lat:
+        self.cancel_timer()
+        print(self.zoom, " on_lat")
         if self.zoom >= 10: self.start_getting_markers_in_fov()
     on_lon:
+        self.cancel_timer()
+        print(self.zoom, " on_lon")
         if self.zoom >= 10: self.start_getting_markers_in_fov()
+    GPSBlinker:
+        id: blinker

@@ -2,6 +2,7 @@ from kivymd.uix.dialog import MDInputDialog
 from geopy.geocoders import Nominatim
 from kivy.app import App
 
+
 class SearchPopupMenu(MDInputDialog):
     title = "Enter the desired location:"
     text_button_ok = "Take me there!"
@@ -15,7 +16,7 @@ class SearchPopupMenu(MDInputDialog):
         location = self.text_field.text
         try:
             lat, lon = self.geocode_get_lat_lon(location)
-        except ValueError:
+        except:
             print("Geocoders problem occurred")
             return
 
