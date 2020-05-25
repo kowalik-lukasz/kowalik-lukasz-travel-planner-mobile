@@ -20,7 +20,7 @@ CREATE TABLE "poi"(
 
 file_name = input("Enter the imported csv file name: ")
 if len(file_name) < 1:
-    file_name = "poi_pipe.csv"
+    file_name = "poi_pipe_condensed.csv"
 
 with open(file_name, encoding="utf-8") as csv_file:
     csv_reader = csv.reader(csv_file, delimiter="|")
