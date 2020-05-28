@@ -1,0 +1,15 @@
+
+
+<ContentNavigationDrawer>:
+    ScrollView:
+        MDList:
+            OneLineListItem:
+                text: "Map"
+                on_press:
+                    root.nav_drawer.set_state("close")
+                    root.screen_manager.current = "main_view"
+            OneLineListItem:
+                text: "Plan Travel"
+                on_press:
+                    root.nav_drawer.set_state("close")
+                    root.screen_manager.current = "route_maker_view"

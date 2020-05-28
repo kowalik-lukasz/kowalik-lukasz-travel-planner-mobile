@@ -1,48 +1,31 @@
 #:include travelplannermapview.kv
+#:include loginpopup.kv
+#:include contentnavdrawer.kv
 
-BoxLayout:
-    orientation: 'vertical'
-    MDToolbar:
-        title: "Travel Planner"
-        right_action_items: [['magnify', lambda x: app.search_menu.open()]]
-        md_bg_color: app.theme_cls.primary_color
-    TravelPlannerMapView:
-        id: mapview
-
-
-
-<LogInPopup>:
-    username: username
-    password: password
-    error_message: error_message
-    FloatLayout:
-        Label:
-            text: "Username"
-            size_hint: 0.6, 0.1
-            pos_hint: {"x":0, "top":0.95}
-        TextInput:
-            id:username
-            size_hint: 0.6,0.1
-            pos_hint: {"x":0.2, "top":0.85}
-        Label:
-            text: "Password"
-            size_hint: 0.6, 0.1
-            pos_hint: {"x":0, "top":0.65}
-        TextInput:
-            id:password
-            size_hint: 0.6,0.1
-            pos_hint: {"x":0.2, "top":0.55}
-        Button:
-            text: "Submit"
-            size_hint: 0.5, 0.15
-            pos_hint: {"x":0.25, "top":0.35}
-            on_press: root.log_in_check()
-        Label:
-            id:error_message
-            color: 1,0,0,1
-            text: "Invalid username or password"
-            pos_hint:{"x":0.25, "top":0.2}
-            size_hint: 0.5, 0.15
-            visible: False
-            opacity: 1 if self.visible else 0
-
+Screen:
+    NavigationLayout:
+        x: toolbar.height
+        ScreenManager:
+            id: screen_manager
+            Screen:
+                name: "main_view"
+                BoxLayout:
+                    orientation: 'vertical'
+                    MDToolbar:
+                        id: toolbar
+                        title: "Travel Planner"
+                        left_action_items: [["menu", lambda x: nav_drawer.set_state("open")]]
+                        right_action_items: [['magnify', lambda x: app.search_menu.open()]]
+                        md_bg_color: app.theme_cls.primary_color
+                    TravelPlannerMapView:
+                        id: mapview
+            Screen:
+                name: "route_maker_view"
+                MDLabel:
+                    text: "Screen 2"
+                    halign: "center"
+        MDNavigationDrawer:
+            id: nav_drawer
+            ContentNavigationDrawer:
+                screen_manager: screen_manager
+                nav_drawer: nav_drawer
