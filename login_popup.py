@@ -36,7 +36,7 @@ class LogInPopup(Popup):
 
 
         # if results:
-        if r.text == 'Logged In':
+        if 'Logged In' in r.text:
             self.dismiss()
             self.conn.close()
         else:
