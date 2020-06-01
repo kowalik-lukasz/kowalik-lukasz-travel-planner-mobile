@@ -49,7 +49,7 @@ class RouteMaker(MDBoxLayout):
             return
 
         # Check if the midpoints' input is in correct format
-        if not re.search("^[0-9a-zA-Z\s-]*(,[0-9a-zA-Z\s-]+)*$", self.midpoints.text):
+        if not re.search(r"^[0-9a-ząćęłńóśżźA-ZĄĆĘŁŃÓŚŻŹ\s-]*(,[0-9a-ząćęłńóśżźA-ZĄĆĘŁŃÓŚŻŹ\s-]+)*$", self.midpoints.text):
             # error popup
             print("Incorrect data format")
             return
@@ -67,13 +67,14 @@ class RouteMaker(MDBoxLayout):
             return
 
         time.sleep(1)
+
         # Communication with django server
-        # app = App.get_running_app()
-        # username = app.username
-        # print(username)
-        # route = {'Start_point': self.starting_point.text, 'Mid_points': self.midpoints.text,
-        #          'End_point': self.endpoint, 'mobile': 'true', 'user': username}
-        # r = requests.post('http://127.0.0.1:8000/planner/plan_journey/', data=route)
-        # print(r)
+        app = App.get_running_app()
+        username = app.username
+        print(username)
+        route = {'Start_point': self.starting_point.text, 'Mid_points': self.midpoints.text,
+                 'End_point': self.endpoint.text, 'mobile': 'true', 'user': username}
+        r = requests.post('http://127.0.0.1:8000/planner/plan_journey/', data=route)
+        print(r)
 
         print("Done")
