@@ -1,7 +1,6 @@
 import sqlite3
 from kivy.uix.popup import Popup
 from kivy.properties import ObjectProperty
-from kivy.app import App
 import requests
 
 
@@ -18,7 +17,6 @@ class LogInPopup(Popup):
 
         credentials = {'username': self.username.text, 'password': self.password.text, 'mobile': 'true'}
         r = requests.post('http://127.0.0.1:8000/planner/user_login/', data=credentials)
-        print(r.text)
 
         # find_user = ("SELECT * FROM users WHERE username = ? AND password = ?")
         # self.cur.execute(find_user, [self.username.text, self.password.text])
@@ -26,7 +24,7 @@ class LogInPopup(Popup):
 
         """
         Example Use of calculating route
-        
+
         route = {'Start_point': 'Wrocław', 'Mid_points': 'Kraków,gdańsk,warszawa,Katowice,malbork', 'End_point': 'wrocław', 'mobile': 'true', 'user': r.text}
         r = requests.post('http://127.0.0.1:8000/planner/plan_journey/', data=route)
         print(r)
@@ -34,8 +32,6 @@ class LogInPopup(Popup):
 
         # if results:
         if 'Logged In' in r.text:
-            app = App.get_running_app()
-            app.username = self.username.text
             self.dismiss()
             self.conn.close()
         else:
