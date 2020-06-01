@@ -1,6 +1,7 @@
 import sqlite3
 from kivy.uix.popup import Popup
 from kivy.properties import ObjectProperty
+from kivymd.app import App
 import requests
 
 
@@ -32,6 +33,8 @@ class LogInPopup(Popup):
 
         # if results:
         if 'Logged In' in r.text:
+            app = App.get_running_app()
+            app.username = self.username.text
             self.dismiss()
             self.conn.close()
         else:
