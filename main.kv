@@ -1,6 +1,7 @@
 #:include travelplannermapview.kv
 #:include loginpopup.kv
 #:include contentnavdrawer.kv
+#:include routemaker.kv
 
 Screen:
     NavigationLayout:
@@ -21,9 +22,17 @@ Screen:
                         id: mapview
             Screen:
                 name: "route_maker_view"
-                MDLabel:
-                    text: "Screen 2"
-                    halign: "center"
+                BoxLayout:
+                    orientation: 'vertical'
+                    MDToolbar:
+                        id: toolbar
+                        title: "Travel Planner"
+                        left_action_items: [["menu", lambda x: nav_drawer.set_state("open")]]
+                        md_bg_color: app.theme_cls.primary_color
+                    ScrollView:
+                        RouteMaker:
+                            id: route_maker
+
         MDNavigationDrawer:
             id: nav_drawer
             ContentNavigationDrawer:

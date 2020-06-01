@@ -1,0 +1,37 @@
+<RouteMaker>:
+    orientation: 'vertical'
+    adaptive_height: True
+    padding: dp(24)
+    spacing: dp(50)
+    pos_hint: {'center_x': .5}
+
+    starting_point: starting_point
+    midpoints: midpoints
+    endpoint: endpoint
+
+    MDTextField:
+        id: starting_point
+        hint_text: "Starting point (required)"
+        mode: "rectangle"
+        fill_color: 0, 0, 0, .4
+
+    MDTextField:
+        id: midpoints
+        hint_text: "Midpoints (optional)"
+        helper_text: "Separate your travel destinations with a comma"
+        helper_text_mode: "on_focus"
+        multiline: True
+        height: "30dp"
+        mode: "rectangle"
+        fill_color: 0, 0, 0, .4
+
+    MDTextField:
+        id: endpoint
+        hint_text: "Endpoint (required)"
+        mode: "rectangle"
+        fill_color: 0, 0, 0, .4
+
+    MDRoundFlatButton:
+        text: "Calculate my route!"
+        pos_hint: {"center_x": .5}
+        on_press: root.route_input_check()

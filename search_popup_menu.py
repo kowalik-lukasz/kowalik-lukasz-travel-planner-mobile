@@ -17,7 +17,7 @@ class SearchPopupMenu(MDInputDialog):
         try:
             lat, lon = self.geocode_get_lat_lon(location)
         except:
-            print("Geocoders problem occurred")
+            print("Invalid input")
             return
 
         app = App.get_running_app()
