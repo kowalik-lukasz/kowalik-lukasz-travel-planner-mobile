@@ -19,19 +19,6 @@ class LogInPopup(Popup):
         credentials = {'username': self.username.text, 'password': self.password.text, 'mobile': 'true'}
         r = requests.post('http://127.0.0.1:8000/planner/user_login/', data=credentials)
 
-        # find_user = ("SELECT * FROM users WHERE username = ? AND password = ?")
-        # self.cur.execute(find_user, [self.username.text, self.password.text])
-        # results = self.cur.fetchall()
-
-        """
-        Example Use of calculating route
-
-        route = {'Start_point': 'Wrocław', 'Mid_points': 'Kraków,gdańsk,warszawa,Katowice,malbork', 'End_point': 'wrocław', 'mobile': 'true', 'user': r.text}
-        r = requests.post('http://127.0.0.1:8000/planner/plan_journey/', data=route)
-        print(r)
-        """
-
-        # if results:
         if 'Logged In' in r.text:
             app = App.get_running_app()
             app.username = self.username.text

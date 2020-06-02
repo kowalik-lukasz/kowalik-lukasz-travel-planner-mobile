@@ -3,38 +3,38 @@
 #:include contentnavdrawer.kv
 #:include routemaker.kv
 
-Screen:
-    NavigationLayout:
-        x: toolbar.height
-        ScreenManager:
-            id: screen_manager
-            Screen:
-                name: "main_view"
-                BoxLayout:
-                    orientation: 'vertical'
-                    MDToolbar:
-                        id: toolbar
-                        title: "Travel Planner"
-                        left_action_items: [["menu", lambda x: nav_drawer.set_state("open")]]
-                        right_action_items: [['magnify', lambda x: app.search_menu.open()]]
-                        md_bg_color: app.theme_cls.primary_color
-                    TravelPlannerMapView:
-                        id: mapview
-            Screen:
-                name: "route_maker_view"
-                BoxLayout:
-                    orientation: 'vertical'
-                    MDToolbar:
-                        id: toolbar
-                        title: "Travel Planner"
-                        left_action_items: [["menu", lambda x: nav_drawer.set_state("open")]]
-                        md_bg_color: app.theme_cls.primary_color
-                    ScrollView:
-                        RouteMaker:
-                            id: route_maker
+NavigationLayout:
+    ScreenManager:
+        id: screen_manager
+        MapScreen:
+            id: "main_view"
+            name: "main_view"
+            BoxLayout:
+                orientation: 'vertical'
+                MDToolbar:
+                    id: toolbar
+                    title: "Travel Planner"
+                    left_action_items: [["menu", lambda x: nav_drawer.set_state("open")]]
+                    right_action_items: [['magnify', lambda x: app.search_menu.open()]]
+                    md_bg_color: app.theme_cls.primary_color
+                TravelPlannerMapView:
+                    id: mapview
+        RouteMakerScreen:
+            id: "route_maker_view"
+            name: "route_maker_view"
+            BoxLayout:
+                orientation: 'vertical'
+                MDToolbar:
+                    id: toolbar
+                    title: "Travel Planner"
+                    left_action_items: [["menu", lambda x: nav_drawer.set_state("open")]]
+                    md_bg_color: app.theme_cls.primary_color
+                ScrollView:
+                    RouteMaker:
+                        id: route_maker
 
-        MDNavigationDrawer:
-            id: nav_drawer
-            ContentNavigationDrawer:
-                screen_manager: screen_manager
-                nav_drawer: nav_drawer
+    MDNavigationDrawer:
+        id: nav_drawer
+        ContentNavigationDrawer:
+            screen_manager: screen_manager
+            nav_drawer: nav_drawer

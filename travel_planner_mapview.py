@@ -1,9 +1,9 @@
-import math
 from kivy.garden.mapview import MapView
 from kivy.clock import Clock
-from functools import partial
 from kivy.app import App
 from poi_marker import POIMarker
+from user_route_marker import UserRouteMarker
+from kivymd.uix.button import MDFlatButton
 
 
 # Properties of the below class in travel_planner_mapview.kv
@@ -11,6 +11,7 @@ class TravelPlannerMapView(MapView):
     getting_markers_timer = None
     poi_names = []  # A list to store markers currently displayed on the screen in order not to duplicate them
     active_poi_widgets = []
+    active_user_marker_widgets = []
 
     def cancel_timer(self):
         try:
@@ -54,3 +55,21 @@ class TravelPlannerMapView(MapView):
             self.remove_widget(marker)
         self.active_poi_widgets.clear()
         self.poi_names.clear()
+
+    def print_user_route(self, user_route_data):
+        # delete previous route
+        if self.active_user_marker_widgets:
+            self.delete_user_route()
+
+        for loc in user_route_data:
+            marker = UserRouteMarker(lat=loc.latitude, lon=loc.longitude)
+            button = MDFlatButton()
+            self.add_widget(button)
+            self.add_widget(marker)
+            self.active_user_marker_widgets.append(marker)
+
+    def delete_user_route(self):
+        for marker in self.active_user_marker_widgets:
+            self.remove_widget(marker)
+        self.active_user_marker_widgets.clear()
+
