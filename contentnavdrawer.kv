@@ -1,15 +1,40 @@
 
 
 <ContentNavigationDrawer>:
+    sign_in: sign_in
+    register: register
+    list: list
+
     ScrollView:
+
         MDList:
+            id: list
+
             OneLineListItem:
+                id: sign_in
+                text: "Sign In"
+                on_press:
+                    root.nav_drawer.set_state("close")
+                    root.log_in_popup.open()
+
+            OneLineListItem:
+                id: register
+                text: "Register"
+                on_press:
+                    root.nav_drawer.set_state("close")
+                    root.register_popup.open()
+
+            OneLineListItem:
+                id: map
                 text: "Map"
                 on_press:
                     root.nav_drawer.set_state("close")
                     root.screen_manager.current = "main_view"
+
             OneLineListItem:
-                text: "Plan Travel"
+                id: travel_planner
+                text: "Travel Planner"
                 on_press:
                     root.nav_drawer.set_state("close")
                     root.screen_manager.current = "route_maker_view"
+
