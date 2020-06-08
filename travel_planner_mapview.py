@@ -65,9 +65,10 @@ class TravelPlannerMapView(MapView):
         if self.active_user_marker_widgets:
             self.delete_user_route()
 
-        i = 1
+        i = 0
         for loc in user_route_data:
-            marker = UserRouteMarker(lat=loc.latitude, lon=loc.longitude)
+            marker = UserRouteMarker(lat=loc.latitude, lon=loc.longitude, position=i)
+            marker.route_data, marker.position = user_route_data, i
             info = i
             label = MDLabel(text=str(info), halign="center", valign="top")
             i += 1

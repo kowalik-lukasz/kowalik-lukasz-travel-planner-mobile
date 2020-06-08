@@ -1,6 +1,8 @@
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.button import MDRoundFlatButton
 from kivy.properties import ObjectProperty
+from kivymd.uix.dialog_orig import MDDialog
+from kivymd.uix.button import MDRaisedButton, MDFlatButton
 from geopy.geocoders import Nominatim
 from kivy.app import App
 import threading
@@ -40,37 +42,55 @@ class RouteMaker(MDBoxLayout):
     starting_point = ObjectProperty(None)
     midpoints = ObjectProperty(None)
     endpoint = ObjectProperty(None)
+    travel_locations = []
 
     # Check user input integrity
     def route_input_check(self):
 
         # Check if the user provided the system with the starting point and endpoint
         if not self.starting_point.text or not self.endpoint.text:
-            # error popup
+            popup = MDDialog(title="Error", text="Either starting point or endpoint not provided!", size_hint=[.5, .5],
+                             auto_dismiss=True)
+            popup.open()
             print("Lack of starting point or endpoint")
             return
 
         # Check if the midpoints' input is in correct format
         if not re.search(r"^[0-9a-ząćęłńóśżźA-ZĄĆĘŁŃÓŚŻŹ\s-]*(,[0-9a-ząćęłńóśżźA-ZĄĆĘŁŃÓŚŻŹ\s-]+)*$",
                          self.midpoints.text):
-            # error popup
+            popup = MDDialog(title="Error", text="Incorrect data format in 'midpoints' field!", size_hint=[.5, .5],
+                             auto_dismiss=True)
+            popup.open()
             print("Incorrect data format")
             return
 
         print(self.midpoints.text)
-        travel_locations = get_location_data(self.starting_point, self.midpoints, self.endpoint)
-        not_found = []
-        for location in travel_locations:
+        self.travel_locations = get_location_data(self.starting_point, self.midpoints, self.endpoint)
+        for location in self.travel_locations:
             if location is None:
-                not_found.append(location)
+                popup = MDDialog(title="Error", text="At least one of the provided locations was not found!",
+                                 size_hint=[.5, .5], auto_dismiss=True)
+                popup.open()
+                print("Not found all of the given locations")
+                return
 
-        if not_found:
-            # error popup, print not found locations
-            print("Not found all of the given locations")
-            return
+        locations_text = ""
+        for location in self.travel_locations:
+            locations_text += " - " + location.address + "\n"
 
-        # TODO Acceptance popup of locations found by Nominatim
+        no_button = MDFlatButton(text="No")
+        yes_button = MDRaisedButton(text="Yes", on_release=self.get_route_from_server)
 
+        popup = MDDialog(title="Confirm Route",
+                         text=f"Do the below locations match your expectations:\n{locations_text}",
+                         size_hint=[.5, .5], auto_dismiss=True,
+                         buttons=[no_button, yes_button])
+        no_button.bind(on_press=popup.dismiss)
+        yes_button.bind(on_press=popup.dismiss)
+        popup.open()
+        return
+
+    def get_route_from_server(self, *args):
         # Communication with django server
         app = App.get_running_app()
         username = app.username
@@ -81,14 +101,20 @@ class RouteMaker(MDBoxLayout):
 
         app.root.ids.screen_manager.current = "main_view"
         user_route = r.text.split(',')
+
+        # Sorting self.travel_locations in an order in which user_route is received from the server
         i = 0
         for loc in user_route:
             j = 0
-            while j < len(travel_locations):
-                if loc in travel_locations[j].address:
-                    travel_locations[j], travel_locations[i] = travel_locations[i], travel_locations[j]
+            while j < len(self.travel_locations):
+                if loc in self.travel_locations[j].address:
+                    self.travel_locations[j], self.travel_locations[i] = self.travel_locations[i], \
+                                                                         self.travel_locations[j]
                     break
                 j += 1
             i += 1
-        print(travel_locations)
-        app.root.ids.mapview.print_user_route(travel_locations)
+
+        app.root.ids.mapview.lat = self.travel_locations[0].latitude
+        app.root.ids.mapview.lon = self.travel_locations[0].longitude
+        app.root.ids.mapview.zoom = 10
+        app.root.ids.mapview.print_user_route(self.travel_locations)
