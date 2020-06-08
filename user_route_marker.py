@@ -34,10 +34,10 @@ class UserRouteMarker(MapMarkerPopup):
         app = App.get_running_app()
         app.root.ids.mapview.lat = self.route_data[self.position - 1].latitude
         app.root.ids.mapview.lon = self.route_data[self.position - 1].longitude
-        # app.root.ids.mapview.zoom = 10
+        app.root.ids.mapview.zoom = 10
 
     def goto_next_location(self, *args):
         app = App.get_running_app()
         app.root.ids.mapview.lat = self.route_data[self.position + 1].latitude
         app.root.ids.mapview.lon = self.route_data[self.position + 1].longitude
-        # app.root.ids.mapview.zoom = 10
+        app.root.ids.mapview.zoom = 10
