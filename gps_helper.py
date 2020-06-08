@@ -2,6 +2,7 @@ from kivy.app import App
 from kivy.utils import platform
 from kivymd.uix.dialog import MDDialog
 
+
 class GPSHelper:
     has_centered_map = False
 
@@ -11,7 +12,7 @@ class GPSHelper:
         # start blinking
         gps_blinker.blink()
 
-        #permissions on Android
+        # permissions on Android
         if platform == 'android':
             from android.permissions import Permission, request_permissions
             def callback(permission, results):

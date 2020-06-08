@@ -20,8 +20,10 @@ def send_geocode_request(location, nom):
 def get_location_data(starting_point, midpoints, endpoint):
     midpoints_list = midpoints.text.split(',')
     travel_locations = [starting_point.text]  # [send_geocode_request(starting_point.text)]
-    for location in midpoints_list:
-        travel_locations.append(location)
+    if midpoints.text:
+        print("weszo")
+        for location in midpoints_list:
+            travel_locations.append(location)
     travel_locations.append(endpoint.text)
 
     with concurrent.futures.ThreadPoolExecutor(max_workers=10) as executor:
@@ -55,8 +57,8 @@ class RouteMaker(MDBoxLayout):
             print("Incorrect data format")
             return
 
+        print(self.midpoints.text)
         travel_locations = get_location_data(self.starting_point, self.midpoints, self.endpoint)
-
         not_found = []
         for location in travel_locations:
             if location is None:
@@ -89,5 +91,4 @@ class RouteMaker(MDBoxLayout):
                 j += 1
             i += 1
         print(travel_locations)
-
         app.root.ids.mapview.print_user_route(travel_locations)

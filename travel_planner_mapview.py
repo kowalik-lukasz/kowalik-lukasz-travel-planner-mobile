@@ -1,8 +1,12 @@
 from kivy.garden.mapview import MapView
+from kivy.garden.mapview import MapLayer
 from kivy.clock import Clock
 from kivy.app import App
 from poi_marker import POIMarker
 from user_route_marker import UserRouteMarker
+from kivymd.uix.label import MDLabel
+from kivy.graphics.vertex_instructions import Line
+from kivy.uix.widget import Widget
 from kivymd.uix.button import MDFlatButton
 
 
@@ -43,8 +47,8 @@ class TravelPlannerMapView(MapView):
 
     def add_poi_marker(self, poi):
         poi_name = poi[0]
-        self.poi_names.append(poi_name)
         lat, lon = poi[1], poi[2]
+        self.poi_names.append(poi_name)
         marker = POIMarker(lat=lat, lon=lon)
         marker.poi_data = poi
         self.add_widget(marker)
@@ -61,10 +65,14 @@ class TravelPlannerMapView(MapView):
         if self.active_user_marker_widgets:
             self.delete_user_route()
 
+        i = 1
         for loc in user_route_data:
             marker = UserRouteMarker(lat=loc.latitude, lon=loc.longitude)
-            button = MDFlatButton()
-            self.add_widget(button)
+            info = i
+            label = MDLabel(text=str(info), halign="center", valign="top")
+            i += 1
+            marker.add_widget(label)
+
             self.add_widget(marker)
             self.active_user_marker_widgets.append(marker)
 
@@ -72,4 +80,3 @@ class TravelPlannerMapView(MapView):
         for marker in self.active_user_marker_widgets:
             self.remove_widget(marker)
         self.active_user_marker_widgets.clear()
-
