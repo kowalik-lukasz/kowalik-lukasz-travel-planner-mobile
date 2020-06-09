@@ -79,7 +79,6 @@ from kivymd.theming import ThemableBehavior
 from kivymd import images_path
 from kivymd.material_resources import DEVICE_IOS
 
-
 Builder.load_string(
     """
 #:import images_path kivymd.images_path
@@ -160,7 +159,6 @@ Builder.load_string(
                     Color:
                         rgba: [1,0,0,.5]
                 ThinBox:
-                    spacing: dp(10)
                     ThinLabel:
                         text: "Point of Interest: "
                     ThinLabel:
@@ -326,12 +324,12 @@ class BaseDialog(ThemableBehavior, ModalView):
                 instance_content_dialog.ids.sep
             )
 
+
 class ListMDDialog(BaseDialog):
     poi_name = StringProperty("Missing data")
     longitude = StringProperty("Missing data")
     latitude = StringProperty("Missing data")
     background = StringProperty('{}ios_bg_mod.png'.format(images_path))
-
 
 
 class MDInputDialog(BaseDialog):
