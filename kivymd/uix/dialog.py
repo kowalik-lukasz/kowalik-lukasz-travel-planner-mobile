@@ -159,7 +159,6 @@ Builder.load_string(
                     Color:
                         rgba: [1,0,0,.5]
                 ThinBox:
-                    spacing: dp(10)
                     ThinLabel:
                         text: "Point of Interest: "
                     ThinLabel:

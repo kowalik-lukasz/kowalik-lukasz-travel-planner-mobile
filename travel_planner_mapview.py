@@ -5,6 +5,7 @@ from kivy.app import App
 from poi_marker import POIMarker
 from user_route_marker import UserRouteMarker
 from kivymd.uix.label import MDLabel
+import requests
 from kivy.graphics.vertex_instructions import Line
 from kivy.uix.widget import Widget
 from kivymd.uix.button import MDFlatButton
@@ -32,22 +33,19 @@ class TravelPlannerMapView(MapView):
 
     def get_markers_in_fov(self, *args):
         min_lat, min_lon, max_lat, max_lon = self.get_bbox()
-        app = App.get_running_app()
-        query = "SELECT * FROM poi WHERE latitude > %s AND latitude <%s AND longitude > %s AND longitude <%s" % (
-            min_lat, max_lat, min_lon, max_lon)
-        app.cur.execute(query)
-        pois = app.cur.fetchall()
-        print(pois)
-        for poi in pois:
-            name = poi[0]
+        bounds = {'min_lat': min_lat, 'min_lon': min_lon, 'max_lat': max_lat, 'max_lon': max_lon, 'mobile': 'true'}
+        r = requests.get('http://127.0.0.1:8000/planner/poi/', params=bounds)
+        decoded_response = r.json()
+        for key, value in decoded_response.items():
+            name = value['poi_name']
             if name in self.poi_names:
                 continue
             else:
-                self.add_poi_marker(poi)
+                self.add_poi_marker(value)
 
     def add_poi_marker(self, poi):
-        poi_name = poi[0]
-        lat, lon = poi[1], poi[2]
+        poi_name = poi['poi_name']
+        lat, lon = poi['latitude'], poi['longitude']
         self.poi_names.append(poi_name)
         marker = POIMarker(lat=lat, lon=lon)
         marker.poi_data = poi
