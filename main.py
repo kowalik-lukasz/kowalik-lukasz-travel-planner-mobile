@@ -39,6 +39,7 @@ class ContentNavigationDrawer(BoxLayout):
             self.list.remove_widget(self.sign_in)
             self.list.remove_widget(self.register)
             self.list.add_widget(OneLineListItem(text="My Trips", id="my_trips"))
+            self.list.add_widget(OneLineListItem(text="Sign Out", id="sign_out"))
 
         elif self.register_popup.currUser != "":
             self.currUser = self.register_popup.currUser
