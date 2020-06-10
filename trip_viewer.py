@@ -1,18 +1,15 @@
-import sqlite3
-
 from kivy.properties import ObjectProperty
+from kivy.uix.floatlayout import FloatLayout
 
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.list import MDList, OneLineListItem
 from kivy.app import App
 from functools import partial
-
 from route_maker import get_location_data
-
 import requests
 
 
-class TripViewer(MDBoxLayout):
+class TripViewer(FloatLayout):
     trip_list = ObjectProperty(MDList)
     route_list = []
     md_item_list = []
@@ -47,7 +44,7 @@ class TripViewer(MDBoxLayout):
             listItem = OneLineListItem(text=listName)
             self.md_item_list.append(listItem)
             listItem.bind(on_press=partial(self.map_route, clean_route))
-            app.root.ids.trip_viewer.ids.trip_list.add_widget(listItem)
+            app.root.ids.trip_viewer.ids.trip_list.add_widget(listItem, 1)
 
     def map_route(self, *args):
         print(args)
@@ -60,14 +57,9 @@ class TripViewer(MDBoxLayout):
 
         locations = get_location_data(starting_point, mid_points, ending_point, "from_trip_viewer")
 
-
-
         app.root.ids.screen_manager.current = "main_view"
 
         app.root.ids.mapview.lat = locations[0].latitude
         app.root.ids.mapview.lon = locations[0].longitude
         app.root.ids.mapview.zoom = 10
         app.root.ids.mapview.print_user_route(locations)
-
-
-

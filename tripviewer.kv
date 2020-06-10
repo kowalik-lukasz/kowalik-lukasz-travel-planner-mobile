@@ -1,7 +1,9 @@
 <TripViewer>:
-    orientation: 'vertical'
     trip_list: trip_list
 
-    MDList:
-        id: trip_list
+    orientation: 'vertical'
+    ScrollView:
+        MDList:
+            pos_hint: {"top":1}
+            id: trip_list
 
