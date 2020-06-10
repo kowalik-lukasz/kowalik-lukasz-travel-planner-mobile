@@ -3,6 +3,7 @@
 #:include contentnavdrawer.kv
 #:include registerpopup.kv
 #:include routemaker.kv
+#:include tripviewer.kv
 
 NavigationLayout:
     ScreenManager:
@@ -33,6 +34,25 @@ NavigationLayout:
                 ScrollView:
                     RouteMaker:
                         id: route_maker
+
+        MyTripsScreen:
+            trip_viewer: trip_viewer
+            id: "my_trips_view"
+            name: "my_trips_view"
+            BoxLayout:
+                orientation: 'vertical'
+                MDToolbar:
+                    id: toolbar
+                    title: "Travel Planner"
+                    left_action_items: [["menu", lambda x: nav_drawer.set_state("open")]]
+                    md_bg_color: app.theme_cls.primary_color
+                ScrollView:
+                    id: scroll_view
+                    TripViewer:
+                        id: trip_viewer
+
+
+
 
     MDNavigationDrawer:
         id: nav_drawer

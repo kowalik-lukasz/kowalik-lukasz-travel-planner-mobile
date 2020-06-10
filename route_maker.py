@@ -19,14 +19,21 @@ def send_geocode_request(location, nom):
     return result
 
 
-def get_location_data(starting_point, midpoints, endpoint):
-    midpoints_list = midpoints.text.split(',')
-    travel_locations = [starting_point.text]  # [send_geocode_request(starting_point.text)]
-    if midpoints.text:
-        print("weszo")
-        for location in midpoints_list:
-            travel_locations.append(location)
-    travel_locations.append(endpoint.text)
+def get_location_data(starting_point, midpoints, endpoint, call_source):
+    travel_locations = []
+    if call_source == "from_route_maker":
+        midpoints_list = midpoints.text.split(',')
+        travel_locations.append(starting_point.text)  # [send_geocode_request(starting_point.text)]
+        if midpoints.text:
+            print("weszo")
+            for location in midpoints_list:
+                travel_locations.append(location)
+        travel_locations.append(endpoint.text)
+    else:
+        travel_locations.append(starting_point)
+        for loc in midpoints:
+            travel_locations.append(loc)
+        travel_locations.append(endpoint)
 
     with concurrent.futures.ThreadPoolExecutor(max_workers=10) as executor:
         args = ((i, Nominatim(user_agent="travel-planner-app", timeout=20)) for i in travel_locations)
@@ -65,7 +72,7 @@ class RouteMaker(MDBoxLayout):
             return
 
         print(self.midpoints.text)
-        self.travel_locations = get_location_data(self.starting_point, self.midpoints, self.endpoint)
+        self.travel_locations = get_location_data(self.starting_point, self.midpoints, self.endpoint, "from_route_maker")
         for location in self.travel_locations:
             if location is None:
                 popup = MDDialog(title="Error", text="At least one of the provided locations was not found!",

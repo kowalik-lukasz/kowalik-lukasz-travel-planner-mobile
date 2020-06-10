@@ -19,9 +19,17 @@ class RegisterPopup(Popup):
         credentials = {'username': self.username.text, 'password': self.password.text, 'mobile': 'true'}
         r = requests.post('http://127.0.0.1:8000/planner/registration/', data=credentials)
 
+        self.username.text = ""
+        self.password.text = ""
+
         if 'Registered' in r.text:
             self.currUser = r.text[11:]
             self.dismiss()
             self.conn.close()
         else:
             self.error_message.visible = True
+
+    def dismiss_popup(self):
+        self.currUser = ""
+        self.error_message.visible = False
+        self.dismiss()
